@@ -1,0 +1,15 @@
+<!-- we use the app-card component defined in card.component.ts -->
+<app-card [list]="students()" (addItem)="addStudent()">
+
+    <!-- image content that gets projected to ng-content in card.component.html -->
+    <img src="assets/img/student.webp" width="200px" />
+
+    <!-- template to be used when student condition is met -->
+    <ng-template listItemRef let-student>
+      <app-list-item (deleteItem)="deleteStudent(student.id)">
+
+        <!-- content displayed within ng-content in list-item.component.html -->
+        {{ student.firstName }}
+      </app-list-item>
+    </ng-template>
+</app-card>

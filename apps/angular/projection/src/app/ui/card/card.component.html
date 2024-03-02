@@ -1,0 +1,17 @@
+    <!-- Use ng-content to conditionally display the img provided to the component -->
+    <ng-content select="img"></ng-content>
+
+    <!-- Use ngTemplateOutletContext to iterate through each item of list and display content in listItemTemplate -->
+    <section>
+        @for (item of list; track item.id) {
+            <ng-template
+                [ngTemplateOutlet]="listItemTemplate"
+                [ngTemplateOutletContext]= "{ $implicit: item }">
+            </ng-template>
+        }
+    </section>
+
+    <!-- Add Button modified to use addItem.emit() function -->
+    <button class="rounded-sm border border-blue-500 bg-blue-300 p-2" (click)="addItem.emit()">
+        Add
+    </button>

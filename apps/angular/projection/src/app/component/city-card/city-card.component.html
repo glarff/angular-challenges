@@ -1,0 +1,15 @@
+<!-- we use the app-card component defined in card.component.ts -->
+<app-card [list]="citys()" (addItem)="addCity()">
+
+    <!-- image content that gets projected to ng-content in card.component.html -->
+    <img src="assets/img/city.png" width="200px" />
+
+    <!-- template to be used when city condition is met -->
+    <ng-template listItemRef let-city>
+      <app-list-item (deleteItem)="deleteCity(city.id)">
+
+        <!-- content displayed within ng-content in list-item.component.html -->
+        {{ city.name }}
+      </app-list-item>
+    </ng-template>
+</app-card>

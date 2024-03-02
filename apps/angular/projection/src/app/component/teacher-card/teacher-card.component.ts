@@ -1,31 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { FakeHttpService } from '../../data-access/fake-http.service';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  WritableSignal,
+} from '@angular/core';
+import {
+  FakeHttpService,
+  randTeacher,
+} from '../../data-access/fake-http.service';
 import { TeacherStore } from '../../data-access/teacher.store';
-import { CardType } from '../../model/card.model';
 import { Teacher } from '../../model/teacher.model';
 import { CardComponent } from '../../ui/card/card.component';
+import { ListItemRefDirective } from '../../ui/list-item/list-item-ref.directive';
+import { ListItemComponent } from '../../ui/list-item/list-item.component';
 
 @Component({
   selector: 'app-teacher-card',
-  template: `
-    <app-card
-      [list]="teachers"
-      [type]="cardType"
-      customClass="bg-light-red"></app-card>
-  `,
+  templateUrl: './teacher-card.component.html',
+  standalone: true,
   styles: [
     `
-      ::ng-deep .bg-light-red {
-        background-color: rgba(250, 0, 0, 0.1);
+      app-card {
+        background-color: rgba(0, 250, 0, 0.1);
       }
     `,
   ],
-  standalone: true,
-  imports: [CardComponent],
+  imports: [CardComponent, ListItemComponent, ListItemRefDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeacherCardComponent implements OnInit {
-  teachers: Teacher[] = [];
-  cardType = CardType.TEACHER;
+  teachers: WritableSignal<Teacher[]> = this.store.teachers;
 
   constructor(
     private http: FakeHttpService,
@@ -33,8 +37,15 @@ export class TeacherCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.http.fetchTeachers$.subscribe((t) => this.store.addAll(t));
+    this.http.fetchTeachers$.subscribe((s) => this.store.addAll(s));
 
-    this.store.teachers$.subscribe((t) => (this.teachers = t));
+    //this.store.teachers$.subscribe((s) => (this.teachers = s));
+  }
+
+  addTeacher(): void {
+    this.store.addOne(randTeacher());
+  }
+  deleteTeacher(id: number): void {
+    this.store.deleteOne(id);
   }
 }
