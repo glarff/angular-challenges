@@ -50,4 +50,13 @@ export class AppComponent implements OnInit {
         this.store.updateOne(targetId, newString);
       });
   }
+
+  // delete function implementation
+  delete(todo: Todo) {
+    this.httpService
+      .delete(`https://jsonplaceholder.typicode.com/todos/${todo.id}`)
+      .subscribe(() => {
+        this.store.deleteOne(todo.id);
+      });
+  }
 }
