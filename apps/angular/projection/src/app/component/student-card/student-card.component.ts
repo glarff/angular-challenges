@@ -38,8 +38,6 @@ export class StudentCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.http.fetchStudents$.subscribe((s) => this.store.addAll(s));
-
-    //this.store.students$.subscribe((s) => (this.students = s));
   }
 
   addStudent(): void {

@@ -1,50 +1,43 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, WritableSignal } from '@angular/core';
 import { randText } from '@ngneat/falso';
-
-// ********************* INTERFACES ******************** //
-interface Todo {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-}
-// ***************************************************** //
+import { TodoStore } from './data-access/todo.store';
+import { Todo } from './model/todo.model';
 
 @Component({
   standalone: true,
   imports: [CommonModule],
   selector: 'app-root',
-  template: `
-    <div *ngFor="let todo of todos">
-      {{ todo.title }}
-      <button (click)="update(todo)">Update</button>
-    </div>
-  `,
+  templateUrl: './app.component.html',
   styles: [],
 })
 export class AppComponent implements OnInit {
-  todos!: Todo[];
+  todolist: WritableSignal<Todo[]> = this.store.todos;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private store: TodoStore,
+  ) {}
 
   ngOnInit(): void {
     this.http
       .get<Todo[]>('https://jsonplaceholder.typicode.com/todos')
       .subscribe((todos) => {
-        console.log(JSON.stringify(todos));
-        this.todos = todos;
+        this.store.addAll(todos);
       });
   }
 
   update(todo: any) {
+    const newString = randText();
+    const targetId = todo.id;
+
     this.http
       .put<Todo>(
         `https://jsonplaceholder.typicode.com/todos/${todo.id}`,
         JSON.stringify({
-          todo: todo.id,
-          title: randText(),
+          todo: targetId,
+          title: newString,
           userId: todo.userId,
         }),
         {
@@ -54,7 +47,7 @@ export class AppComponent implements OnInit {
         },
       )
       .subscribe((todoUpdated: Todo) => {
-        this.todos[todoUpdated.id - 1] = todoUpdated;
+        this.store.updateOne(targetId, newString);
       });
   }
 }
