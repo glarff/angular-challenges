@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, WritableSignal } from '@angular/core';
 import { randText } from '@ngneat/falso';
 import { TodoStore } from './data-access/todo.store';
 import { Todo } from './model/todo.model';
+import { HttpService } from './service/http.service';
 
 @Component({
   standalone: true,
@@ -16,24 +16,24 @@ export class AppComponent implements OnInit {
   todolist: WritableSignal<Todo[]> = this.store.todos;
 
   constructor(
-    private http: HttpClient,
+    private httpService: HttpService,
     private store: TodoStore,
   ) {}
 
   ngOnInit(): void {
-    this.http
-      .get<Todo[]>('https://jsonplaceholder.typicode.com/todos')
+    this.httpService
+      .get('https://jsonplaceholder.typicode.com/todos')
       .subscribe((todos) => {
         this.store.addAll(todos);
       });
   }
 
-  update(todo: any) {
+  update(todo: Todo) {
     const newString = randText();
     const targetId = todo.id;
 
-    this.http
-      .put<Todo>(
+    this.httpService
+      .put(
         `https://jsonplaceholder.typicode.com/todos/${todo.id}`,
         JSON.stringify({
           todo: targetId,
