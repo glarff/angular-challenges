@@ -19,10 +19,7 @@
           "apps/angular/crud/src/favicon.ico",
           "apps/angular/crud/src/assets"
         ],
-        "styles": [
-          "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-          "apps/angular/crud/src/styles.scss"
-        ],
+        "styles": ["apps/angular/crud/src/styles.scss"],
         "scripts": [],
         "allowedCommonJsDependencies": ["seedrandom"]
       },

@@ -1,0 +1,20 @@
+<app-error-modal></app-error-modal>
+<section>
+    @for (todo of todolist(); track todo.id) {
+        <div class="text-xs border-y px-2 w-[40rem] flex items-center">
+            <p class = "flex-1 text-left">
+                {{ todo.title }}
+            </p>
+            
+            <div class = "ml-auto">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 border border-blue-700 rounded my-0.5 mr-1 ml-2" (click)="update(todo)">
+                    Update
+                </button>
+                <button class="bg-white hover:bg-gray-100 text-red-800 font-semibold px-4 border border-red-400 rounded shadow" (click)="delete(todo)">
+                    Delete
+                </button>
+            </div>
+
+        </div>
+    }
+</section>
