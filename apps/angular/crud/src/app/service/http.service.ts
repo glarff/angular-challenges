@@ -29,7 +29,7 @@ export class TodoHttpService {
   updateTodo(todo: Todo): Observable<Todo> {
     return this.http
       .put<Todo>(
-        `https://jsonplaceholder.typicode.com/todos/${todo.id}`,
+        `https://jsonplaceholdrer.typicode.com/todos/${todo.id}`,
         JSON.stringify({
           todo: todo.id,
           title: randText(),

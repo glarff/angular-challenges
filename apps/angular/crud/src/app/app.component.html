@@ -2,10 +2,13 @@
 <section>
     @for (todo of todolist(); track todo.id) {
         <div class="text-xs border-y px-2 w-[40rem] flex items-center">
+
+            <!-- Todo Text -->
             <p class = "flex-1 text-left">
                 {{ todo.title }}
             </p>
-            
+
+            <!-- Action Buttons -->
             <div class = "ml-auto">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 border border-blue-700 rounded my-0.5 mr-1 ml-2" (click)="update(todo)">
                     Update
