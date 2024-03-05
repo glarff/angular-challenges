@@ -5,8 +5,6 @@ import {
   OnInit,
   WritableSignal,
 } from '@angular/core';
-import { randText } from '@ngneat/falso';
-import { catchError } from 'rxjs/operators';
 import { TodoStore } from './data-access/todo.store';
 import { ErrorHandlerService } from './error-handler.service';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
@@ -31,52 +29,21 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.httpService.get().subscribe((todos) => {
+    this.httpService.getTodos().subscribe((todos) => {
       this.store.addAll(todos);
     });
   }
 
   update(todo: Todo) {
-    const newString = randText();
-
-    this.httpService
-      .put(
-        `https://jsonplaceholder.typicode.com/todos/${todo.id}`,
-        JSON.stringify({
-          todo: todo.id,
-          title: newString,
-          userId: todo.userId,
-        }),
-        {
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-          },
-        },
-      )
-      .pipe(
-        catchError((error) => {
-          console.error('Error on PUT request:', error);
-          return [];
-        }),
-      )
-      .subscribe((todoUpdated: Todo) => {
-        this.store.updateOne(todo.id, newString);
-      });
+    this.httpService.updateTodo(todo).subscribe((todoUpdated: Todo) => {
+      this.store.updateOne(todoUpdated.id, todoUpdated.title);
+    });
   }
 
-  // delete function implementation
   delete(todo: Todo) {
-    this.httpService
-      .delete(`https://jsonplaceholder.typicode.com/todos/${todo.id}`)
-      .pipe(
-        catchError((error) => {
-          console.error('Error on DELETE request:', error);
-          return [];
-        }),
-      )
-      .subscribe(() => {
-        this.store.deleteOne(todo.id);
-      });
+    this.httpService.deleteTodo(todo).subscribe(() => {
+      this.store.deleteOne(todo.id);
+    });
   }
   close(): void {
     this.errorService.clearError();

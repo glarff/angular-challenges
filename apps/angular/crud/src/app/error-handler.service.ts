@@ -12,6 +12,7 @@ export class ErrorHandlerService {
   }
 
   clearError(): void {
+    console.info('clearing error');
     this.errorMessage.set('');
   }
 }

@@ -30,7 +30,7 @@ describe('HttpService', () => {
     const apiUrl = 'https://example.com/api/data';
 
     // Make a mock HTTP request
-    httpService.get().subscribe((data) => {
+    httpService.getTodos().subscribe((data) => {
       expect(data).toEqual(testData); // Assert that the response matches the test data
     });
 
